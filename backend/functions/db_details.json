@@ -1,0 +1,7 @@
+{
+    "user": "postgres",
+    "host": "localhost",
+    "database": "revenuemanager",
+    "password": "luqman4g",
+    "port": 6969
+}

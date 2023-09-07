@@ -1,12 +1,8 @@
 const { Client } = require('pg');
 
-const client = new Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'revenuemanager',
-    password: 'luqman4g',
-    port: 6969
-});
+const db = require("./db_details.json");
+
+const client = new Client(db);
 client.connect();
 
 function database(dbquery,end) {
