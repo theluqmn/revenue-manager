@@ -8,7 +8,7 @@ client.connect();
 function database(dbquery,end) {
     client.query(dbquery, (err, res) => {
         if (err) {
-            console.error(err);
+            console.log(err);
             return;
         }
         console.log("Query action successful!")

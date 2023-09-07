@@ -3,18 +3,18 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
-const productRoutes = require('./api/routes/products');
-const orderRoutes = require('./api/routes/orders');
-const userRoutes = require('./api/routes/users')
+// Requiring the routes
+const userRoutes = require('./routes/users')
+const roleRoutes = require('./routes/roles')
 
+// Middleware
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // Routes that will handle requests
-app.use('/products', productRoutes);
-app.use('/orders', orderRoutes);
 app.use('/users', userRoutes);
+app.use('/roles', roleRoutes);
 
 // Error handling
 app.use((req, res, next) => {

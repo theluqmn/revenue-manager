@@ -1,26 +1,34 @@
 const express = require('express');
+const db = require('../functions/database');
+const database = require('../functions/database');
 const router = express.Router();
 
+// Get request
 router.get('/', (req, res, next) => {
     res.status(200).json({
-        message: "Handling get post"
+        message: "Users were fetched"
     });
 });
 
-// Adding new product
+// Adding new users
 router.post('/', (req, res, next) => {
-    const product = {
-        productId: req.body.name,
-        productId: req.body.price
+    const user = {
+        fullname: req.body.fullname,
+        role: req.body.role
     };
+
+    database(`
+    INSERT INTO users (email, firstname, lastname, age)
+    VALUES ('${user.email}', '${user.firstname}', '${user.lastname}', ${user.age});
+    `);
 
     res.status(200).json({
         message: "Handling post request",
-        createdProduct: product
+        createdProduct: user
     });
 });
 
-// Getting the product ID
+// Getting users with ID
 router.get('/:productId', (req, res, next) => {
     const id = req.params.productId;
 
@@ -34,20 +42,6 @@ router.get('/:productId', (req, res, next) => {
             message: "You passed an ID"
         });
     }
-});
-
-// Update
-router.patch('/:productId', (req, res, next) => {
-    res.status(200).json({
-        message: "Updated product"
-    });
-});
-
-// Delete
-router.delete('/:productId', (req, res, next) => {
-    res.status(200).json({
-        message: "Deleted product"
-    });
 });
 
 module.exports = router;
