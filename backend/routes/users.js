@@ -3,7 +3,7 @@ const db = require('../functions/database');
 const database = require('../functions/database');
 const router = express.Router();
 
-// Get request
+// Fetching all users from a company
 router.get('/', (req, res, next) => {
     res.status(200).json({
         message: "Users were fetched"
@@ -13,13 +13,14 @@ router.get('/', (req, res, next) => {
 // Adding new users
 router.post('/', (req, res, next) => {
     const user = {
+        company_id: req.body.company_id,
         fullname: req.body.fullname,
         role: req.body.role
     };
 
     database(`
-    INSERT INTO users (email, firstname, lastname, age)
-    VALUES ('${user.email}', '${user.firstname}', '${user.lastname}', ${user.age});
+    INSERT INTO users (fullname, role)
+    VALUES ('${user.company_id}','${user.fullname}', '${user.role}');
     `);
 
     res.status(200).json({
