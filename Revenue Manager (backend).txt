@@ -1,0 +1,141 @@
+Revenue Manager (backend)
+
+Uses a PostgreSQL database.
+
+//// Calculation:
+
+cashflow = account.balance + (revenue - (operational_expenses + salary))
+
+- Active tax check
+Returned for every operation.
+
+if (cashflow > 0) {
+	tax.total = tax.total + ((tax_percents/cashflow) * 100)
+} else {
+	not taxable as the cashflow is negative, no profit to pay taxes.
+}
+
+- Yearly tax check
+Will fetch all the calculations done for the year and compile it all into a single calculation
+so taxes can be calculated for the corresponding year.
+
+Formula is same as active tax checks, but instead of the cashflow variable, a variable that contains
+all the calculations done in the year are used.
+
+//// Database Hierarchy, tables:
+
+- Organization
+Arguments:
+(id int, name varchar, json varchar, divisions varchar, roles varchar, data varchar)
+
+Example:
+(1, 'Epic organization', {
+	"description" : "The most epic organization!",
+	"owner" : 10587
+}, [1050,560,100,80], [
+	{"name" : "CEO",
+	"has_role" : [1050],
+	"permissions" : {
+		"admin" : "true",
+		"access" : []
+		},
+	"salary" : 800
+	}
+], {
+	"debt" : [{
+		"name" : "real",
+		"amount" : 1000,
+		"type" : "monthly"
+	}],
+	"country" : "Malaysia",
+	"" : "",
+	"account" : {
+		"balance" : 3000,
+		"cash" : 1000,
+		"bank" : [
+			{
+				"bank_name" : "Standard Chartered Bank",
+				"balance" : 1500
+			}
+		]
+	}
+})
+
+- Divisions
+Divisions are different parts or "teams" in the organisation.
+
+Arguments:
+(id int, name varchar, members)
+
+//// Stuff
+
+- Users
+Individuals that created an account in the project. Users can be part of
+multiple organizations at the same time, without any limitations.
+
+Arguments:
+(id int, username varchar, password varchar,name varchar, email varchar, age int)
+
+Example:
+(1, 'luqmanity', 'realFR', {"first_name" : "luqman", "last_name" : "yazrie"}, 'luqman.yazrie@gmail.com', 14)
+
+//// Technical
+
+- Logs
+Stores the logs of both actions done on the manager and calculations.
+Is created corresponding to organization, hence sharing the same ID.
+
+Arguments:
+(id int, actions varchar, calculations varchar)
+
+Example:
+(8080, [{
+	"action_message" : "Added new user",
+	"by" : 1
+	"time" : {
+		"day" : 30,
+		"month" : 4,
+		"year" : 2024,
+		"hour" : 16,
+		"minute" : 33,
+		"second" : 10
+	}
+},{
+	"action_message" : "Created new division named graphics",
+	"by" : 1
+	"time" : {
+		"day" : 26,
+		"month" : 4,
+		"year" : 2024,
+		"hour" : 24,
+		"minute" : 45,
+		"second" : 59
+	}
+},{
+}], [{
+	"message" : "New calculation executed",
+	"results" : {
+		"inputs" : {
+			"revenue" : 10000,
+			"operational_expenses" : {
+				"total" : 5000,
+			"purchases" : [{
+				"product_name" : "cheap ahh car",
+				"description" : "for the compute of the mobile team",
+				"price" : {
+					"paymentType" : "one-time"
+					"price" : 2000
+				}
+			}]
+			}
+		}
+	},
+	"time" : {
+		"day" : 26,
+		"month" : 4,
+		"year" : 2024,
+		"hour" : 24,
+		"minute" : 45,
+		"second" : 59
+	}
+}, {}])
